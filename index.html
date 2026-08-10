@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Secure FaceID Wallet & eKYC Banking System</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- TOP MODE SWITCHER -->
+    <div class="top-nav">
+        <div class="nav-brand">
+            <i class="fa-solid fa-wallet brand-icon"></i>
+            <span>CryptoWallet eKYC & FaceID</span>
+        </div>
+        <div class="mode-tabs">
+            <button id="tab-ekyc" class="tab-btn active" onclick="switchMode('ekyc')">
+                <i class="fa-solid fa-id-card"></i> 1. Đăng ký 5 Góc Mặt
+            </button>
+            <button id="tab-faceid" class="tab-btn" onclick="switchMode('faceid')">
+                <i class="fa-solid fa-money-bill-transfer"></i> 2. Chuyển tiền > 10Tr
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN MOBILE CONTAINER -->
+    <main class="app-container">
+        
+        <!-- MOBILE PHONE MOCKUP FRAME -->
+        <div class="phone-frame">
+            
+            <!-- PHONE HARDWARE ELEMENTS -->
+            <div class="phone-speaker"></div>
+            <div class="dynamic-island">
+                <div class="island-camera"></div>
+                <div class="island-sensor"></div>
+            </div>
+
+            <!-- PHONE SCREEN CONTENT -->
+            <div class="phone-screen">
+                
+                <!-- STATUS BAR -->
+                <div class="status-bar">
+                    <span class="status-time" id="status-time">09:41</span>
+                    <div class="status-icons">
+                        <i class="fa-solid fa-signal"></i>
+                        <i class="fa-solid fa-wifi"></i>
+                        <i class="fa-solid fa-battery-full"></i>
+                    </div>
+                </div>
+
+                <!-- ==================================================== -->
+                <!-- BƯỚC 1: ĐĂNG KÝ 5 THỬ THÁCH CỬ ĐỘNG MẶT & CHECK 5 QUY CHUẨN -->
+                <!-- ==================================================== -->
+                <div id="screen-ekyc" class="screen-view active-screen">
+                    <div class="app-header">
+                        <div class="bank-logo">
+                            <i class="fa-solid fa-shield-halved"></i> eKYC PRE-CHECK COMPLIANCE
+                        </div>
+                        <h2>Đăng ký eKYC Đa Góc Mặt</h2>
+                        <p class="subtitle">Yêu cầu: Không kính, Không khẩu trang, Rõ trán, Đủ sáng</p>
+                    </div>
+
+                    <!-- INPUT ID VÍ NGƯỜI DÙNG -->
+                    <div class="input-card">
+                        <label for="user-id-input"><i class="fa-solid fa-wallet"></i> Nhập ID Ví / SĐT Người dùng:</label>
+                        <div class="input-with-btn">
+                            <input type="text" id="user-id-input" value="0987654321" placeholder="Nhập ID Ví (e.g. 0x71C... hoặc SĐT)">
+                            <button class="btn-gen-id" title="Tạo ngẫu nhiên" onclick="generateRandomWalletId()">
+                                <i class="fa-solid fa-dice"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- EKYC COMPLIANCE RULES CHECKLIST BANNER -->
+                    <div class="compliance-checklist">
+                        <div class="check-item"><i class="fa-solid fa-sun"></i> Đủ sáng</div>
+                        <div class="check-item"><i class="fa-solid fa-glasses"></i> Bỏ kính</div>
+                        <div class="check-item"><i class="fa-solid fa-mask-face"></i> Tháo khẩu trang</div>
+                        <div class="check-item"><i class="fa-solid fa-hat-cowboy"></i> Tháo mũ</div>
+                        <div class="check-item"><i class="fa-solid fa-user"></i> Rõ trán</div>
+                    </div>
+
+                    <!-- 5-STEP GUIDED ACTIVE POSE BANNER WITH ANGLE INSTRUCTION -->
+                    <div class="ekyc-pose-guide" id="ekyc-pose-guide">
+                        <div class="pose-header">
+                            <div class="pose-step-badge" id="pose-step-num">BƯỚC 1/5</div>
+                            <span class="pose-title" id="ekyc-pose-instruction">👈 QUAY MẶT SANG TRÁI (30° - 45°)</span>
+                        </div>
+                        <div class="pose-detail-help" id="ekyc-pose-detail-help">
+                            Từ từ xoay đầu sang bên trái khoảng 30° - 45° và giữ yên trong 3 giây.
+                        </div>
+                    </div>
+
+                    <!-- EKYC CAMERA VIEWPORT WITH COUNTDOWN OVERLAY & DIRECTION ARROWS -->
+                    <div class="camera-wrapper">
+                        <video id="video-ekyc" autoplay playsinline muted></video>
+                        <canvas id="canvas-ekyc" class="camera-canvas"></canvas>
+                        
+                        <!-- DYNAMIC DIRECTIONAL GUIDANCE ARROWS -->
+                        <div class="directional-guide" id="directional-guide">
+                            <i class="fa-solid fa-arrow-left guide-arrow left" id="arrow-left"></i>
+                            <i class="fa-solid fa-arrow-right guide-arrow right" id="arrow-right"></i>
+                            <i class="fa-solid fa-arrow-down guide-arrow down" id="arrow-down"></i>
+                            <i class="fa-solid fa-arrow-up guide-arrow up" id="arrow-up"></i>
+                            <i class="fa-solid fa-bullseye guide-arrow center" id="arrow-center"></i>
+                        </div>
+
+                        <!-- OVAL FACE GUIDE OVERLAY -->
+                        <div class="face-oval-container">
+                            <div class="face-oval" id="ekyc-oval">
+                                <div class="laser-scanner" id="ekyc-laser"></div>
+                            </div>
+                        </div>
+
+                        <!-- 3-SECOND COUNTDOWN TIMER OVERLAY -->
+                        <div class="countdown-overlay hidden" id="countdown-overlay">
+                            <div class="countdown-circle" id="countdown-circle">3</div>
+                            <div class="countdown-text" id="countdown-text">Đang đếm ngược 3s... Hãy giữ yên góc mặt!</div>
+                        </div>
+
+                        <!-- QUALITY BADGES -->
+                        <div class="camera-badges">
+                            <div class="badge" id="badge-quality">
+                                <i class="fa-solid fa-circle-check"></i> Kiểm soát 5 Quy chuẩn eKYC
+                            </div>
+                            <div class="badge glow-badge" id="badge-pose-status">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> Sẵn sàng đẩy 5 ảnh lên Cloudinary
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ACTION BUTTONS -->
+                    <div class="action-area">
+                        <button id="btn-start-ekyc" class="btn-primary" onclick="startEkyc5PoseTour()">
+                            <i class="fa-solid fa-play"></i> Bắt đầu Chuỗi 5 Thử thách (Đếm ngược 3s)
+                        </button>
+                        <button id="btn-manual-capture" class="btn-secondary btn-sm hidden" onclick="triggerImmediateCapture()">
+                            <i class="fa-solid fa-camera"></i> 📸 Đã căn đúng góc mặt -> Chụp ngay
+                        </button>
+                    </div>
+
+                    <!-- REGISTRATION SUCCESS / COMPLIANCE ERROR CARD -->
+                    <div id="ekyc-result-card" class="result-card hidden">
+                        <div class="success-icon" id="ekyc-res-icon"><i class="fa-solid fa-circle-check"></i></div>
+                        <h3 id="ekyc-res-title">Đã đẩy 5 Ảnh lên Cloudinary Media Library!</h3>
+                        <p class="card-desc" id="ekyc-res-desc">Master Vector 512D đã mã hóa và 5 ảnh đa góc lưu trên Cloudinary cá nhân.</p>
+                        <div class="info-row" id="ekyc-info-wallet">
+                            <span>ID Ví Gắn nhãn:</span>
+                            <strong id="registered-id-display">0987654321</strong>
+                        </div>
+                        <div class="info-row" id="ekyc-info-status">
+                            <span>Cloudinary Status:</span>
+                            <span class="status-pill active" id="ekyc-status-pill"><i class="fa-solid fa-cloud"></i> 5_IMAGES_UPLOADED</span>
+                        </div>
+                        <div class="info-row-multiline" id="ekyc-info-links">
+                            <span>5 Links Ảnh Cloudinary CDN:</span>
+                            <div id="cloud-image-links-container" class="cloud-links-list"></div>
+                        </div>
+                        <button class="btn-secondary" onclick="resetEkycForm()">
+                            <i class="fa-solid fa-rotate-left"></i> Đăng ký ID Ví khác
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ==================================================== -->
+                <!-- BƯỚC 3: MÀN HÌNH CHUYỂN TIỀN > 10TR TRIGGER FACEID   -->
+                <!-- ==================================================== -->
+                <div id="screen-faceid" class="screen-view">
+                    <div class="app-header">
+                        <div class="bank-logo">
+                            <i class="fa-solid fa-money-bill-wave"></i> NEXUS PAY SYSTEM
+                        </div>
+                        <h2>Chuyển tiền Sinh trắc học</h2>
+                        <p class="subtitle">Kiểm tra FaceID với giao dịch > 10.000.000đ</p>
+                    </div>
+
+                    <!-- TRANSACTION FORM -->
+                    <div class="tx-card">
+                        <div class="tx-header">
+                            <span class="tx-type"><i class="fa-solid fa-paper-plane"></i> Lệnh chuyển tiền Ví</span>
+                            <span class="tx-badge-secure" id="tx-biometric-tag"><i class="fa-solid fa-shield-cat"></i> Biometric Req</span>
+                        </div>
+
+                        <div class="amount-input-box">
+                            <label>Số tiền chuyển (VNĐ):</label>
+                            <div class="amount-field">
+                                <input type="number" id="tx-amount-input" value="15000000" step="1000000" oninput="onAmountChanged()">
+                            </div>
+                            <div class="quick-amounts">
+                                <button onclick="setTxAmount(5000000)">5 Triệu</button>
+                                <button onclick="setTxAmount(15000000)" class="active">15 Triệu (>10M)</button>
+                                <button onclick="setTxAmount(50000000)">50 Triệu</button>
+                            </div>
+                        </div>
+
+                        <div class="tx-details">
+                            <div class="tx-row">
+                                <span class="label">ID Ví Người chuyển:</span>
+                                <input type="text" id="tx-sender-id" class="inline-input" value="0987654321">
+                            </div>
+                            <div class="tx-row">
+                                <span class="label">Ví Người nhận:</span>
+                                <span class="val bold">0x71C89A...B321</span>
+                            </div>
+                            <div class="tx-row">
+                                <span class="label">Nội dung:</span>
+                                <span class="val">Chuyen tien DATN Secure FaceID</span>
+                            </div>
+                        </div>
+
+                        <div id="tx-notice-banner" class="notice-banner required-faceid">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span id="notice-text">Giao dịch > 10 triệu: Bắt buộc xác thực FaceID (Trạm 1 & Trạm 2 Cloud DB)</span>
+                        </div>
+                    </div>
+
+                    <div class="action-area">
+                        <button id="btn-submit-tx" class="btn-pay" onclick="handleTxSubmit()">
+                            <i class="fa-solid fa-face-smile"></i> Xác thực FaceID Duyệt Giao dịch
+                        </button>
+                    </div>
+
+                    <!-- FACEID POPUP MODAL WITH ACTIVE 3D MOTION INSTRUCTION -->
+                    <div id="faceid-modal" class="modal-overlay hidden">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3><i class="fa-solid fa-shield-halved"></i> Quét FaceID Cloud DB</h3>
+                                <button class="btn-close-modal" onclick="closeFaceIdModal()">&times;</button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="pose-challenge-banner" id="pose-challenge-banner">
+                                    <i class="fa-solid fa-rotate" id="challenge-icon"></i>
+                                    <span id="challenge-text">👈 THỬ THÁCH ACTIVE 3D: NGHIÊNG/QUAY MẶT HOẶC CHỚP MẮT</span>
+                                </div>
+
+                                <div class="faceid-camera-wrapper">
+                                    <video id="video-faceid" autoplay playsinline muted></video>
+                                    <canvas id="canvas-faceid" class="camera-canvas"></canvas>
+                                    
+                                    <div class="faceid-scan-ring" id="faceid-ring">
+                                        <div class="laser-scanner scanning" id="faceid-laser"></div>
+                                    </div>
+
+                                    <div class="stage-overlay" id="stage-overlay">
+                                        <div class="spinner"></div>
+                                        <span id="stage-text">Đang quét Cử động 3D...</span>
+                                    </div>
+                                </div>
+
+                                <div class="verify-stages">
+                                    <div class="stage-box" id="stage-1-box">
+                                        <i class="fa-solid fa-microchip"></i>
+                                        <span>Trạm 1: Anti-Spoofing Hybrid Fusion (3D Motion)</span>
+                                        <i class="fa-solid fa-spinner fa-spin stage-icon" id="stage-1-icon"></i>
+                                    </div>
+                                    <div class="stage-box" id="stage-2-box">
+                                        <i class="fa-solid fa-cloud"></i>
+                                        <span>Trạm 2: InsightFace Match (Cloud DB)</span>
+                                        <i class="fa-solid fa-clock stage-icon" id="stage-2-icon"></i>
+                                    </div>
+                                </div>
+
+                                <button class="btn-secondary btn-sm" onclick="simulateActivePoseDone()">
+                                    <i class="fa-solid fa-circle-check"></i> Giả lập Hoàn thành Pose
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RESULT MODAL -->
+                    <div id="tx-result-modal" class="result-modal-overlay hidden">
+                        <div class="result-box" id="result-box">
+                            <div class="result-icon-circle" id="result-icon-circle">
+                                <i class="fa-solid fa-check" id="result-icon"></i>
+                            </div>
+                            <h2 id="result-title">GIAO DỊCH THÀNH CÔNG!</h2>
+                            <p id="result-subtitle">Hóa đơn chuyển tiền đã được duyệt qua 2 Trạm sinh trắc học và Cloud DB.</p>
+
+                            <div class="receipt-box">
+                                <div class="receipt-row">
+                                    <span>Mã Giao Dịch:</span>
+                                    <strong id="res-tx-id">TXN-89410294</strong>
+                                </div>
+                                <div class="receipt-row">
+                                    <span>Số tiền:</span>
+                                    <strong id="res-amount">15.000.000 VNĐ</strong>
+                                </div>
+                                <div class="receipt-row">
+                                    <span>Trạm 1 Liveness:</span>
+                                    <strong id="res-liveness-score">0.9996 (REAL 3D)</strong>
+                                </div>
+                                <div class="receipt-row">
+                                    <span>Trạm 2 Cloud Match:</span>
+                                    <strong id="res-cosine-score">0.8876 (MATCH)</strong>
+                                </div>
+                            </div>
+
+                            <button class="btn-primary" onclick="closeTxResultModal()">
+                                Hoàn tất Giao dịch
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div> <!-- /phone-screen -->
+
+            <!-- PHONE HOME INDICATOR BAR -->
+            <div class="home-indicator"></div>
+        </div> <!-- /phone-frame -->
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
