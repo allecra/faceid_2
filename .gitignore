@@ -12,8 +12,6 @@ __pycache__/
 *.caffemodel
 cloudinary_config.json
 buffalo_l/
-resources/anti_spoof_models/
-resources/detection_model/
 saved_logs/
 graph_edges.csv
 graph_nodes.csv
