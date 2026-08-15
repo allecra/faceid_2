@@ -131,8 +131,11 @@ def api_verify_faceid():
                 'success': False,
                 'status': 'REJECTED',
                 'user_id': user_id,
+                'liveness_score': '0.0000 (SPOOF / FAILED)',
+                'cosine_score': f'{cosine_score:.4f}',
                 'message': 'Từ chối giao dịch: ID Ví chưa đăng ký hoặc mặt không khớp'
             })
+
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
 
