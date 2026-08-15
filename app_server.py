@@ -140,7 +140,11 @@ def api_verify_faceid():
         return jsonify({'success': False, 'message': str(e)}), 500
 
 if __name__ == '__main__':
+    host = os.getenv('SERVER_HOST', '0.0.0.0')
+    port = int(os.getenv('SERVER_PORT', 5000))
+    debug = os.getenv('DEBUG', 'false').lower() == 'true'
     print("="*60)
-    print("🚀 KHỞI CHẠY MOBILE eKYC & FACEID SERVER TẠI: http://127.0.0.1:5000")
+    print(f"🚀 KHỞI CHẠY MOBILE eKYC & FACEID SERVER TẠI: http://{host}:{port}")
     print("="*60)
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host=host, port=port, debug=debug)
+
