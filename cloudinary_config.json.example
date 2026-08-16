@@ -1,6 +1,6 @@
 {
-  "cloud_name": "YOUR_CLOUDINARY_CLOUD_NAME",
-  "api_key": "YOUR_CLOUDINARY_API_KEY",
-  "api_secret": "YOUR_CLOUDINARY_API_SECRET",
+  "cloud_name": "dntu2oyta",
+  "api_key": "934839499636714",
+  "api_secret": "MBw_U4LALsLiMgSonPSJTp4JlPk",
   "comment": "Hãy thay 3 thông số trên bằng Cloud Name, API Key, API Secret từ trang https://cloudinary.com/console của bạn!"
 }
