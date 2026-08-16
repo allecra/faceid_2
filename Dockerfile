@@ -11,9 +11,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PyTorch CPU-only (saves ~2.5GB disk compared to default CUDA build)
+# Upgrade pip and packaging tools
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
+# Install PyTorch CPU-only (using extra-index-url so standard PyPI packages remain accessible)
 RUN pip install --no-cache-dir \
-    torch torchvision --index-url https://download.pytorch.org/whl/cpu
+    torch torchvision --extra-index-url https://download.pytorch.org/whl/cpu
 
 # Install remaining Python dependencies
 COPY requirements.txt .
@@ -26,9 +29,9 @@ RUN python download_models.py || true
 # Copy all application code
 COPY . .
 
-EXPOSE 5000
+EXPOSE 5001
 
 ENV PYTHONUNBUFFERED=1
-ENV PORT=5000
+ENV PORT=5001
 
 CMD ["python", "app_server.py"]

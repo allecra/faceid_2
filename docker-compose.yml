@@ -4,15 +4,15 @@
     container_name: faceid-service
     restart: unless-stopped
     ports:
-      - "5000:5000"
+      - "5001:5001"
     env_file:
       - .env
     environment:
-      - PORT=5000
+      - PORT=5001
     volumes:
       - sqlite_data:/app
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/api/wallets"]
+      test: ["CMD", "curl", "-f", "http://localhost:5001/api/wallets"]
       interval: 30s
       timeout: 10s
       retries: 3

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 import sys
 import os
 import base64
@@ -20,7 +20,7 @@ from cloud_db import list_all_wallets
 app = Flask(__name__, static_folder='.', static_url_path='')
 
 def base64_to_cv2(b64_string):
-    """Chuyển đổi chuỗi ảnh Base64 từ WebRTC Canvas thành OpenCV BGR Image Array (RAM Buffer)"""
+    """Chuyá»ƒn Ä‘á»•i chuá»—i áº£nh Base64 tá»« WebRTC Canvas thÃ nh OpenCV BGR Image Array (RAM Buffer)"""
     if not b64_string:
         return None
     if ',' in b64_string:
@@ -40,7 +40,7 @@ def static_files(path):
 
 @app.route('/api/wallets', methods=['GET'])
 def api_list_wallets():
-    """API Xem trực tiếp danh sách tất cả ID Ví và Đường dẫn 5 ảnh Cloudinary CDN trên trình duyệt"""
+    """API Xem trá»±c tiáº¿p danh sÃ¡ch táº¥t cáº£ ID VÃ­ vÃ  ÄÆ°á»ng dáº«n 5 áº£nh Cloudinary CDN trÃªn trÃ¬nh duyá»‡t"""
     wallets = list_all_wallets()
     return jsonify({
         'success': True,
@@ -50,7 +50,7 @@ def api_list_wallets():
 
 @app.route('/api/register_ekyc', methods=['POST'])
 def api_register_ekyc():
-    """API Đăng ký sinh trắc học eKYC 5 Góc Mặt từ WebRTC Camera & Kiểm tra 5 Quy chuẩn Bảo mật"""
+    """API ÄÄƒng kÃ½ sinh tráº¯c há»c eKYC 5 GÃ³c Máº·t tá»« WebRTC Camera & Kiá»ƒm tra 5 Quy chuáº©n Báº£o máº­t"""
     try:
         data = request.get_json()
         user_id = data.get('user_id', '0987654321')
@@ -67,29 +67,29 @@ def api_register_ekyc():
             if f is not None: frames.append(f)
 
         if not frames:
-            return jsonify({'success': False, 'message': 'Thiếu dữ liệu hình ảnh'}), 400
+            return jsonify({'success': False, 'message': 'Thiáº¿u dá»¯ liá»‡u hÃ¬nh áº£nh'}), 400
 
-        # Đăng ký KYC kèm Kiểm tra 5 Quy chuẩn eKYC nghiêm ngặt
+        # ÄÄƒng kÃ½ KYC kÃ¨m Kiá»ƒm tra 5 Quy chuáº©n eKYC nghiÃªm ngáº·t
         success, cloud_urls, msg = register_new_user(user_id, frames)
         if success:
             return jsonify({
                 'success': True,
                 'user_id': user_id,
-                'message': f'Đăng ký eKYC & Tải {len(cloud_urls if cloud_urls else [])} ảnh lên Cloudinary Media Library thành công!',
+                'message': f'ÄÄƒng kÃ½ eKYC & Táº£i {len(cloud_urls if cloud_urls else [])} áº£nh lÃªn Cloudinary Media Library thÃ nh cÃ´ng!',
                 'vector_hash': f'0x{hash(user_id) & 0xffffffffffffffff:016x}',
                 'image_cloud_urls': cloud_urls or ["https://res.cloudinary.com/demo/image/upload/sample.jpg"]
             })
         else:
             return jsonify({
                 'success': False,
-                'message': msg or 'Từ chối đăng ký eKYC vì vi phạm quy chuẩn'
+                'message': msg or 'Tá»« chá»‘i Ä‘Äƒng kÃ½ eKYC vÃ¬ vi pháº¡m quy chuáº©n'
             }), 400
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
 
 @app.route('/api/verify_faceid', methods=['POST'])
 def api_verify_faceid():
-    """API Xác thực FaceID 2 trạm cho giao dịch tài chính"""
+    """API XÃ¡c thá»±c FaceID 2 tráº¡m cho giao dá»‹ch tÃ i chÃ­nh"""
     try:
         data = request.get_json()
         user_id = data.get('user_id', '0987654321')
@@ -97,7 +97,7 @@ def api_verify_faceid():
         active_passed = data.get('active_liveness_passed', True)
 
         if not images_b64:
-            return jsonify({'success': False, 'message': 'Thiếu dữ liệu hình ảnh'}), 400
+            return jsonify({'success': False, 'message': 'Thiáº¿u dá»¯ liá»‡u hÃ¬nh áº£nh'}), 400
 
         frames = []
         if isinstance(images_b64, list):
@@ -109,7 +109,7 @@ def api_verify_faceid():
             if f is not None: frames.append(f)
 
         if not frames:
-            return jsonify({'success': False, 'message': 'Không thể giải mã hình ảnh'}), 400
+            return jsonify({'success': False, 'message': 'KhÃ´ng thá»ƒ giáº£i mÃ£ hÃ¬nh áº£nh'}), 400
 
         is_approved = verify_transaction(user_id, frames, active_liveness_passed=active_passed)
 
@@ -133,7 +133,7 @@ def api_verify_faceid():
                 'user_id': user_id,
                 'liveness_score': '0.0000 (SPOOF / FAILED)',
                 'cosine_score': f'{cosine_score:.4f}',
-                'message': 'Từ chối giao dịch: ID Ví chưa đăng ký hoặc mặt không khớp'
+                'message': 'Tá»« chá»‘i giao dá»‹ch: ID VÃ­ chÆ°a Ä‘Äƒng kÃ½ hoáº·c máº·t khÃ´ng khá»›p'
             })
 
     except Exception as e:
@@ -141,10 +141,10 @@ def api_verify_faceid():
 
 if __name__ == '__main__':
     host = os.getenv('SERVER_HOST', '0.0.0.0')
-    port = int(os.getenv('SERVER_PORT', 5000))
+    port = int(os.getenv('PORT', os.getenv('SERVER_PORT', 5001)))
     debug = os.getenv('DEBUG', 'false').lower() == 'true'
     print("="*60)
-    print(f"🚀 KHỞI CHẠY MOBILE eKYC & FACEID SERVER TẠI: http://{host}:{port}")
+    print(f"ðŸš€ KHá»žI CHáº Y MOBILE eKYC & FACEID SERVER Táº I: http://{host}:{port}")
     print("="*60)
     app.run(host=host, port=port, debug=debug)
 
